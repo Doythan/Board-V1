@@ -31,7 +31,7 @@ Spring 기반 게시판 프로젝트입니다.
 
 ---
 
-## 🔩 애플리케이션 설정 (application.properties 해설)
+## 애플리케이션 설정 (application.properties 해설)
 
 ```properties
 server.port=8080
@@ -73,7 +73,7 @@ spring.jpa.defer-datasource-initialization=true # JPA가 테이블 만든 뒤 da
 
 ---
 
-## 📁 디렉터리 개요
+## 디렉터리 개요
 
 ```
 src
@@ -105,7 +105,7 @@ src
 
 ---
 
-## 🧪 더미 데이터(data.sql) 예시
+## 더미 데이터(data.sql) 예시
 
 ```sql
 insert into board_tb (title, content) values ('title1', 'Spring Boot Study 1');
