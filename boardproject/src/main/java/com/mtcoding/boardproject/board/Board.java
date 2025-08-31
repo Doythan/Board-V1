@@ -1,5 +1,6 @@
 package com.mtcoding.boardproject.board;
 
+import com.mtcoding.boardproject.user.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,10 @@ public class Board {
 
     @CreationTimestamp  // 자동으로 현재 시간 저장
     private Timestamp createdAt;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Builder  // 객체 생성 용도
     public Board(String title, String content) {
