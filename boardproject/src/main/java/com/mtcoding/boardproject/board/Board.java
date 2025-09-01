@@ -28,8 +28,9 @@ public class Board {
     private User user;
 
     @Builder  // 객체 생성 용도
-    public Board(String title, String content) {
+    public Board(String title, String content, User user) {
         this.title = title;
         this.content = content;
+        this.user = user;
     }
 }

@@ -14,4 +14,10 @@ public class UserRequest {
             return User.builder().username(username).password(password).email(email).build();
         }
     }
+
+    @Data
+    public static class LoginDTO {
+        private String username;
+        private String password;
+    }
 }

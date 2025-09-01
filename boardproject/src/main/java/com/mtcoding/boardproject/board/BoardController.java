@@ -1,6 +1,9 @@
 package com.mtcoding.boardproject.board;
 
+import com.mtcoding.boardproject.core.handler.ex.Exception401;
+import com.mtcoding.boardproject.user.User;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,22 +16,35 @@ import java.util.List;
 @Controller
 public class BoardController {
     private final BoardService boardService;
+    private final HttpSession session;
 
     @PostMapping("/boards/{id}/update")
-    public String updateById(@PathVariable Integer id, BoardRequest.UpdateDTO requestDTO) {
-        boardService.게시글수정(id, requestDTO);
+    public String updateById(@PathVariable Integer id, BoardRequest.UpdateDTO requestDTO){
+        User sessionUser = (User)session.getAttribute("session");
+        if(sessionUser == null){
+            throw new Exception401("로그인이 필요합니다.");
+        }
+        boardService.게시글수정(id, requestDTO,sessionUser.getId());
         return "redirect:/boards/" + id;
     }
 
     @PostMapping("/boards/{id}/delete")
-    public String deleteById(@PathVariable Integer id) {
-        boardService.게시글삭제(id);
+    public String deleteById(@PathVariable Integer id){
+        User sessionUser = (User)session.getAttribute("session"); // 세션 꺼냄
+        if(sessionUser == null){
+            throw new Exception401("로그인이 필요합니다.");
+        }
+        boardService.게시글삭제(id,sessionUser.getId());
         return "redirect:/";
     }
 
     @PostMapping("/boards/save")
-    public String save(BoardRequest.SaveDTO requestDTO) {
-        boardService.게시글추가(requestDTO);
+    public String save(BoardRequest.SaveDTO requestDTO){
+        User sessionUser = (User)session.getAttribute("session");
+        if(sessionUser == null){
+            throw new Exception401("로그인이 필요합니다.");
+        }
+        boardService.게시글추가(requestDTO,sessionUser);
         return "redirect:/";
     }
 
@@ -41,6 +57,10 @@ public class BoardController {
 
     @GetMapping("/boards/save-form")
     public String saveForm() {
+        User sessionUser = (User)session.getAttribute("session");
+        if(sessionUser == null){
+            throw new Exception401("로그인이 필요합니다.");
+        }
         return "board/save-form";
     }
 
@@ -53,7 +73,11 @@ public class BoardController {
 
     @GetMapping("/boards/{id}/update-form")
     public String updateForm(HttpServletRequest request, @PathVariable Integer id) {
-        BoardResponse.DTO board = boardService.게시글수정폼(id);
+        User sessionUser = (User)session.getAttribute("session");
+        if(sessionUser == null){
+            throw new Exception401("로그인이 필요합니다.");
+        }
+        BoardResponse.DTO board = boardService.게시글수정폼(id,sessionUser.getId());
         request.setAttribute("model", board);
         return "board/update-form";
     }

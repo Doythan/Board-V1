@@ -1,16 +1,29 @@
 package com.mtcoding.boardproject.user;
 
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+@RequiredArgsConstructor
 @Controller
 public class UserController {
 
     private final UserService userService;
+    private final HttpSession session;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    @GetMapping("/logout")
+    public String logout() {
+        session.invalidate();
+        return "redirect:/";
+    }
+
+    @PostMapping("/login")
+    public String login(UserRequest.LoginDTO requestDTO) {
+        User user = userService.로그인(requestDTO);
+        session.setAttribute("session", user);
+        return "redirect:/";
     }
 
     @PostMapping("/join")

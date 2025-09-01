@@ -13,6 +13,14 @@ public class BoardRepository {
 
     private final EntityManager em;
 
+    public Optional<Board> findByIdJoinUser(int id) {
+        Optional<Board> board = em.createQuery("select b from Board b join fetch b.user where b.id = :id", Board.class)
+                .setParameter("id", id)
+                .getResultStream()
+                .findFirst();
+        return board;
+    }
+
     public Optional<Board> findById(int id) {
         Board board = em.find(Board.class, id);
         return Optional.ofNullable(board);
